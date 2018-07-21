@@ -256,14 +256,25 @@ func (c *Client) doGetForecast10(url string) (*Forecast10Response, error) {
 }
 
 func (c *Client) GetForecast10ByLocation(lat float64, lng float64, units string) (*Forecast10Response, error) {
+url:=make_api_url(lat, lng, 'forecast/daily/10day', units)
+  return c.doGetForecast10(url)
+}
+
+func (c *Client) GetWwirByLocation(lat float64, lng float64, units string) (*Forecast10Response, error) {
+url:=make_api_url(lat, lng, 'forecast/wwir', units)
+  return c.doGetForecast10(url)
+}
+
+func make_api_url(lat float64, lng float64, path_fragment string, units string) {
   if units == "" {
     units = "e"
   }
-  url := fmt.Sprintf("https://api.weather.com/v1/geocode/%f/%f/forecast/daily/10day.json?apiKey=%s&units=%s",
+  url := fmt.Sprintf("https://api.weather.com/v1/geocode/%f/%f/%s.json?apiKey=%s&units=%s",
     url.PathEscape(format_float(lat)), url.PathEscape(format_float(lng)),
+    path_fragment,
     url.PathEscape(c.api_key), url.PathEscape(units))
   //log.Debug(url)
-  return c.doGetForecast10(url)
+  return url
 }
 
 func format_float(f float64) string {

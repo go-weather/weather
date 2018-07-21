@@ -10,12 +10,12 @@ import (
   "net/http"
 )
 
-// For wunderground api, night follows day.
+// For weather.com/wunderground api, night follows day.
 // This means when retrieving a forecast in the middle of a day,
 // there is data for night but not day part
 // of the day on which the forecast is retrieved.
 
-type WuForecastResponseMetadata struct {
+type ForecastResponseMetadata struct {
   Language      string  `json:"language"`
   TransactionId string  `json:"transaction_id"`
   Version       string  `json:"version"`
@@ -26,7 +26,7 @@ type WuForecastResponseMetadata struct {
   StatusCode    int     `json:"status_code"`
 }
 
-type WuForecastResponseDaypart struct {
+type ForecastResponseDaypart struct {
   // UTC timestamp for the forecast, e.g. 1531782000
   FcstValid int64 `json:"fcst_valid"`
   // ISO8601 time for the forecast, e.g. "2018-07-16T19:00:00-0400"
@@ -148,7 +148,7 @@ type WuForecastResponseDaypart struct {
   IconCode int `json:"icon_code"`
 }
 
-type WuForecastResponseForecast struct {
+type ForecastResponseForecast struct {
   // Type of forecast, "fod_long_range_daily" for this data
   Class string `json:"class"`
   // UTC timestamp: 1531769805
@@ -209,53 +209,53 @@ type WuForecastResponseForecast struct {
   SnowRange  string                     `json:"snow_range"`
   SnowPhrase string                     `json:"snow_phrase"`
   SnowCode   string                     `json:"snow_code"`
-  Night      WuForecastResponseDaypart  `json:"night"`
-  Day        *WuForecastResponseDaypart `json:"day"`
+  Night      ForecastResponseDaypart  `json:"night"`
+  Day        *ForecastResponseDaypart `json:"day"`
 }
 
-type WuForecast10Response struct {
-  Metadata  WuForecastResponseMetadata   `json:"metadata"`
-  Forecasts []WuForecastResponseForecast `json:"forecasts"`
+type Forecast10Response struct {
+  Metadata  ForecastResponseMetadata   `json:"metadata"`
+  Forecasts []ForecastResponseForecast `json:"forecasts"`
 }
 
-type WuClient struct {
+type Client struct {
   api_key     string
   http_client http.Client
 }
 
-func NewWuClient(api_key string) (*WuClient, error) {
-  client := WuClient{
+func NewClient(api_key string) (*Client, error) {
+  client := Client{
     api_key,
     http.Client{},
   }
   return &client, nil
 }
 
-func (c *WuClient) doGetForecast10(url string) (*WuForecast10Response, error) {
+func (c *Client) doGetForecast10(url string) (*Forecast10Response, error) {
   req, err := http.NewRequest("GET", url, nil)
   if err != nil {
-    return nil, errors.New("Could not send wu request:" + err.Error())
+    return nil, errors.New("Could not send request:" + err.Error())
     return nil, err
   }
 
   res, err := c.http_client.Do(req)
   if err != nil {
-    return nil, errors.New("Could not read wu response:" + err.Error())
+    return nil, errors.New("Could not read response:" + err.Error())
   }
 
   defer res.Body.Close()
 
-  var payload WuForecast10Response
+  var payload Forecast10Response
   dec := json.NewDecoder(res.Body)
   err = dec.Decode(&payload)
   if err != nil {
-    return nil, errors.New("Could not decode wu forecast:" + err.Error())
+    return nil, errors.New("Could not decode forecast:" + err.Error())
   }
 
   return &payload, nil
 }
 
-func (c *WuClient) GetForecast10ByLocation(lat float64, lng float64) (*WuForecast10Response, error) {
+func (c *Client) GetForecast10ByLocation(lat float64, lng float64) (*Forecast10Response, error) {
   url := fmt.Sprintf("https://api.weather.com/v1/geocode/%f/%f/forecast/daily/10day.json?apiKey=%s&units=e",
     url.PathEscape(format_float(lat)), url.PathEscape(format_float(lng)),
     url.PathEscape(c.api_key))

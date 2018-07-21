@@ -256,7 +256,9 @@ func (c *Client) doGetForecast10(url string) (*Forecast10Response, error) {
 }
 
 func (c *Client) GetForecast10ByLocation(lat float64, lng float64, units string) (*Forecast10Response, error) {
-if units == "" { units ="e" }
+  if units == "" {
+    units = "e"
+  }
   url := fmt.Sprintf("https://api.weather.com/v1/geocode/%f/%f/forecast/daily/10day.json?apiKey=%s&units=%s",
     url.PathEscape(format_float(lat)), url.PathEscape(format_float(lng)),
     url.PathEscape(c.api_key), url.PathEscape(units))

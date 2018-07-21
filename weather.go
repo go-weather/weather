@@ -17,25 +17,25 @@ import (
 
 type ForecastResponseMetadata struct {
   // ex: "en-US"
-  Language      string  `json:"language"`
+  Language string `json:"language"`
   // ex: "1532212454337:-56034070"
-  TransactionId string  `json:"transaction_id"`
+  TransactionId string `json:"transaction_id"`
   // ex: "1"
-  Version       string  `json:"version"`
+  Version string `json:"version"`
   // Latitude, either rounded to 2 decimal places or taken from the
   // weather station supplying the data rather than the request lat/lng
   // ex: 40.75
-  Latitude      float64 `json:"latitude"`
+  Latitude float64 `json:"latitude"`
   // Longitude, either rounded to 2 decimal places or taken from the
   // weather station supplying the data rather than the request lat/lng
   // ex: -74
-  Longitude     float64 `json:"longitude"`
+  Longitude float64 `json:"longitude"`
   // ex: "e"
-  Units         string  `json:"units"`
+  Units string `json:"units"`
   // ex: 1532213015
-  ExpireTimeGmt int64   `json:"expire_time_gmt"`
+  ExpireTimeGmt int64 `json:"expire_time_gmt"`
   // ex: 200
-  StatusCode    int     `json:"status_code"`
+  StatusCode int `json:"status_code"`
 }
 
 type ForecastResponseDaypart struct {
@@ -267,8 +267,8 @@ type WwirResponseForecast struct {
 }
 
 type WwirResponse struct {
-  Metadata  ForecastResponseMetadata   `json:"metadata"`
-  Forecast []WwirResponseForecast `json:"forecast"`
+  Metadata ForecastResponseMetadata `json:"metadata"`
+  Forecast []WwirResponseForecast   `json:"forecast"`
 }
 
 type Client struct {
@@ -284,7 +284,7 @@ func NewClient(api_key string) (*Client, error) {
   return &client, nil
 }
 
-func (c *Client) make_api_request(url string, payload interface{}) (error) {
+func (c *Client) make_api_request(url string, payload interface{}) error {
   req, err := http.NewRequest("GET", url, nil)
   if err != nil {
     return errors.New("Could not send request:" + err.Error())
@@ -308,29 +308,29 @@ func (c *Client) make_api_request(url string, payload interface{}) (error) {
 
 func (c *Client) doGetForecast10(url string) (*Forecast10Response, error) {
   var payload Forecast10Response
-err := c.make_api_request(url, &payload)
-if err != nil {
-return nil, err
-}
-return &payload, nil
+  err := c.make_api_request(url, &payload)
+  if err != nil {
+    return nil, err
+  }
+  return &payload, nil
 }
 
 func (c *Client) doGetWwir(url string) (*WwirResponse, error) {
   var payload WwirResponse
-err := c.make_api_request(url, &payload)
-if err != nil {
-return nil, err
-}
-return &payload, nil
+  err := c.make_api_request(url, &payload)
+  if err != nil {
+    return nil, err
+  }
+  return &payload, nil
 }
 
 func (c *Client) GetForecast10ByLocation(lat float64, lng float64, units string) (*Forecast10Response, error) {
-url:=c.make_api_url(lat, lng, "forecast/daily/10day", units)
+  url := c.make_api_url(lat, lng, "forecast/daily/10day", units)
   return c.doGetForecast10(url)
 }
 
 func (c *Client) GetWwirByLocation(lat float64, lng float64, units string) (*Forecast10Response, error) {
-url:=c.make_api_url(lat, lng, "forecast/wwir", units)
+  url := c.make_api_url(lat, lng, "forecast/wwir", units)
   return c.doGetForecast10(url)
 }
 

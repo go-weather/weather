@@ -4,7 +4,7 @@ import (
   "encoding/json"
   "errors"
   "fmt"
-  log "github.com/sirupsen/logrus"
+  //log "github.com/sirupsen/logrus"
   "net/http"
 )
 
@@ -255,6 +255,6 @@ func (c *WuClient) doGetForecast10(url string) (*WuForecast10Response, error) {
 
 func (c *WuClient) GetForecast10ByLocation(lat float64, lng float64) (*WuForecast10Response, error) {
   url := fmt.Sprintf("https://api.weather.com/v1/geocode/%f/%f/forecast/daily/10day.json?apiKey=%s&units=e", lat, lng, c.api_key)
-  log.Debug(url)
+  //log.Debug(url)
   return c.doGetForecast10(url)
 }

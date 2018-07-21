@@ -16,13 +16,25 @@ import (
 // of the day on which the forecast is retrieved.
 
 type ForecastResponseMetadata struct {
+  // ex: "en-US"
   Language      string  `json:"language"`
+  // ex: "1532212454337:-56034070"
   TransactionId string  `json:"transaction_id"`
+  // ex: "1"
   Version       string  `json:"version"`
+  // Latitude, either rounded to 2 decimal places or taken from the
+  // weather station supplying the data rather than the request lat/lng
+  // ex: 40.75
   Latitude      float64 `json:"latitude"`
+  // Longitude, either rounded to 2 decimal places or taken from the
+  // weather station supplying the data rather than the request lat/lng
+  // ex: -74
   Longitude     float64 `json:"longitude"`
+  // ex: "e"
   Units         string  `json:"units"`
+  // ex: 1532213015
   ExpireTimeGmt int64   `json:"expire_time_gmt"`
+  // ex: 200
   StatusCode    int     `json:"status_code"`
 }
 
@@ -218,6 +230,47 @@ type Forecast10Response struct {
   Forecasts []ForecastResponseForecast `json:"forecasts"`
 }
 
+type WwirResponseForecast struct {
+  // Type of forecast, "fod_short_range_wwir" for this data
+  Class string `json:"class"`
+  // UTC timestamp: 1531769805
+  ExpireTimeGmt int64 `json:"expire_time_gmt"`
+  // UTC timestamp: 1531911600
+  // FcstValid seems to precede ExpireTimeGmt in this data
+  FcstValid int64 `json:"fcst_valid"`
+  // ISO8601 local time: "2018-07-18T07:00:00-0400"
+  FcstValidLocal string `json:"fcst_valid_local"`
+  // ex: 1
+  OverallType int `json:"overall_type"`
+  // ex: "Expect occasional rain to continue for the next several hours."
+  Phrase string `json:"phrase"`
+  // ex: "Rain will continue."
+  TersePhrase string `json:"terse_phrase"`
+  // Template from which Phrase is constructed. Sometimes there are
+  // no variables to substitute and Phrase is the same as PhraseTemplate
+  // ex: "Expect occasional rain to continue for the next several hours."
+  PhraseTemplate string `json:"phrase_template"`
+  // Template from which TersePhrase is constructed. Sometimes there are
+  // no variables to substitute and TersePhrase is the same as TersePhraseTemplate
+  // ex: "Rain will continue."
+  TersePhraseTemplate string `json:"terse_phrase_template"`
+  // Always null in data I have seen
+  PrecipDay *string `json:"precip_day"`
+  // Always null in data I have seen
+  PrecipTime24hr *string `json:"precip_time_24hr"`
+  // Always null in data I have seen
+  PrecipTime12hr *string `json:"precip_time_12hr"`
+  // Always null in data I have seen
+  PrecipTimeIso *string `json:"precip_time_iso"`
+  // ex: "EDT"
+  TimeZoneAbbrv *string `json:"time_zone_abbrv"`
+}
+
+type WwirResponse struct {
+  Metadata  ForecastResponseMetadata   `json:"metadata"`
+  Forecast []WwirResponseForecast `json:"forecast"`
+}
+
 type Client struct {
   api_key     string
   http_client http.Client
@@ -231,41 +284,57 @@ func NewClient(api_key string) (*Client, error) {
   return &client, nil
 }
 
-func (c *Client) doGetForecast10(url string) (*Forecast10Response, error) {
+func (c *Client) make_api_request(url string, payload interface{}) (error) {
   req, err := http.NewRequest("GET", url, nil)
   if err != nil {
-    return nil, errors.New("Could not send request:" + err.Error())
-    return nil, err
+    return errors.New("Could not send request:" + err.Error())
   }
 
   res, err := c.http_client.Do(req)
   if err != nil {
-    return nil, errors.New("Could not read response:" + err.Error())
+    return errors.New("Could not read response:" + err.Error())
   }
 
   defer res.Body.Close()
 
-  var payload Forecast10Response
   dec := json.NewDecoder(res.Body)
-  err = dec.Decode(&payload)
+  err = dec.Decode(payload)
   if err != nil {
-    return nil, errors.New("Could not decode forecast:" + err.Error())
+    return errors.New("Could not decode:" + err.Error())
   }
 
-  return &payload, nil
+  return nil
+}
+
+func (c *Client) doGetForecast10(url string) (*Forecast10Response, error) {
+  var payload Forecast10Response
+err := c.make_api_request(url, &payload)
+if err != nil {
+return nil, err
+}
+return &payload, nil
+}
+
+func (c *Client) doGetWwir(url string) (*WwirResponse, error) {
+  var payload WwirResponse
+err := c.make_api_request(url, &payload)
+if err != nil {
+return nil, err
+}
+return &payload, nil
 }
 
 func (c *Client) GetForecast10ByLocation(lat float64, lng float64, units string) (*Forecast10Response, error) {
-url:=make_api_url(lat, lng, 'forecast/daily/10day', units)
+url:=c.make_api_url(lat, lng, "forecast/daily/10day", units)
   return c.doGetForecast10(url)
 }
 
 func (c *Client) GetWwirByLocation(lat float64, lng float64, units string) (*Forecast10Response, error) {
-url:=make_api_url(lat, lng, 'forecast/wwir', units)
+url:=c.make_api_url(lat, lng, "forecast/wwir", units)
   return c.doGetForecast10(url)
 }
 
-func make_api_url(lat float64, lng float64, path_fragment string, units string) {
+func (c *Client) make_api_url(lat float64, lng float64, path_fragment string, units string) string {
   if units == "" {
     units = "e"
   }

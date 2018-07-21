@@ -1,8 +1,8 @@
 # New weather.com / Weather Underground API Client for Go
 
-[![GoDoc](https://godoc.org/github.com/p/go-weather?status.svg)](https://godoc.org/github.com/p/go-weather)
+[![GoDoc](https://godoc.org/github.com/go-weather/weather?status.svg)](https://godoc.org/github.com/go-weather/weather)
 
-go-weather implements a client for weather.com API
+weather implements a client for weather.com API
 at https://api.weather.com/v1/. Sometimes this API is called
 the "Weather Underground API".
 
@@ -15,7 +15,7 @@ https://www.wunderground.com/weather/us/ny/new-york.
 
 ## Documentation
 
-Documentation is available on [godoc.org](https://godoc.org/github.com/p/go-weather).
+Documentation is available on [godoc.org](https://godoc.org/github.com/go-weather/weather).
 
 ## License
 

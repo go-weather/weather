@@ -38,7 +38,7 @@ type Metadata struct {
   StatusCode int `json:"status_code"`
 }
 
-type ForecastResponseDaypart struct {
+type DaypartForecast struct {
   // UTC timestamp for the forecast, e.g. 1531782000
   FcstValid int64 `json:"fcst_valid"`
   // ISO8601 time for the forecast, e.g. "2018-07-16T19:00:00-0400"
@@ -160,7 +160,7 @@ type ForecastResponseDaypart struct {
   IconExtd int `json:"icon_extd"`
 }
 
-type ForecastResponseForecast struct {
+type Forecast10 struct {
   // Type of forecast, "fod_long_range_daily" for this data
   Class string `json:"class"`
   // UTC timestamp: 1531769805
@@ -221,16 +221,16 @@ type ForecastResponseForecast struct {
   SnowRange  string                   `json:"snow_range"`
   SnowPhrase string                   `json:"snow_phrase"`
   SnowCode   string                   `json:"snow_code"`
-  Night      ForecastResponseDaypart  `json:"night"`
-  Day        *ForecastResponseDaypart `json:"day"`
+  Night      DaypartForecast  `json:"night"`
+  Day        *DaypartForecast `json:"day"`
 }
 
 type Forecast10Response struct {
   Metadata  Metadata   `json:"metadata"`
-  Forecasts []ForecastResponseForecast `json:"forecasts"`
+  Forecasts []Forecast10 `json:"forecasts"`
 }
 
-type WwirResponseForecast struct {
+type Wwir struct {
   // Type of forecast, "fod_short_range_wwir" for this data
   Class string `json:"class"`
   // UTC timestamp: 1531769805
@@ -268,7 +268,7 @@ type WwirResponseForecast struct {
 
 type WwirResponse struct {
   Metadata Metadata `json:"metadata"`
-  Forecast WwirResponseForecast   `json:"forecast"`
+  Forecast Wwir `json:"forecast"`
 }
 
 type UnitObservation struct {

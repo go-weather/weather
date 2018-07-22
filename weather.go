@@ -217,16 +217,16 @@ type Forecast10 struct {
   Narrative string  `json:"narrative"`
   Qpf       float64 `json:"qpf"`
   // may be int
-  SnowQpf    float64                  `json:"snow_qpf"`
-  SnowRange  string                   `json:"snow_range"`
-  SnowPhrase string                   `json:"snow_phrase"`
-  SnowCode   string                   `json:"snow_code"`
+  SnowQpf    float64          `json:"snow_qpf"`
+  SnowRange  string           `json:"snow_range"`
+  SnowPhrase string           `json:"snow_phrase"`
+  SnowCode   string           `json:"snow_code"`
   Night      DaypartForecast  `json:"night"`
   Day        *DaypartForecast `json:"day"`
 }
 
 type Forecast10Response struct {
-  Metadata  Metadata   `json:"metadata"`
+  Metadata  Metadata     `json:"metadata"`
   Forecasts []Forecast10 `json:"forecasts"`
 }
 
@@ -268,44 +268,44 @@ type Wwir struct {
 
 type WwirResponse struct {
   Metadata Metadata `json:"metadata"`
-  Forecast Wwir `json:"forecast"`
+  Forecast Wwir     `json:"forecast"`
 }
 
 type UnitObservation struct {
-  Temp int `json:"temp"`
-  FeelsLike int `json:"feels_like"`
-  Wspd int `json:"wspd"`
-  Gust *int `json:"gust"`
+  Temp      int  `json:"temp"`
+  FeelsLike int  `json:"feels_like"`
+  Wspd      int  `json:"wspd"`
+  Gust      *int `json:"gust"`
   // Visibility?
   Vis float64 `json:"vis"`
   // Mean sea level pressure?
-  Mslp float64 `json:"mslp"`
-  Altimeter float64 `json:"altimeter"`
-  Ceiling float64 `json:"ceiling"`
-  Dewpt int `json:"dewpt"`
-  Rh int `json:"rh"`
-  Wc int `json:"wc"`
-  Hi int `json:"hi"`
-  TempChange24hour int `json:"temp_change_24hour"`
-  TempMax24hour int `json:"temp_max_24hour"`
-  TempMin24hour int `json:"temp_min_24hour"`
-  Pchange float64 `json:"pchange"`
+  Mslp             float64 `json:"mslp"`
+  Altimeter        float64 `json:"altimeter"`
+  Ceiling          float64 `json:"ceiling"`
+  Dewpt            int     `json:"dewpt"`
+  Rh               int     `json:"rh"`
+  Wc               int     `json:"wc"`
+  Hi               int     `json:"hi"`
+  TempChange24hour int     `json:"temp_change_24hour"`
+  TempMax24hour    int     `json:"temp_max_24hour"`
+  TempMin24hour    int     `json:"temp_min_24hour"`
+  Pchange          float64 `json:"pchange"`
   // These could be ints but more likely are all floats
-  Snow1hour float64 `json:"snow_1hour"`
-  Snow6hour float64 `json:"snow_6hour"`
-  Snow24hour float64 `json:"snow_24hour"`
-  SnowMtd float64 `json:"snow_mtd"`
-  SnowSeason float64 `json:"snow_season"`
-  SnowYtd float64 `json:"snow_ytd"`
-  Snow3day float64 `json:"snow_3day"`
-  Snow7day float64 `json:"snow_7day"`
-  Precip1hour float64 `json:"precip_1hour"`
-  Precip6hour float64 `json:"precip_6hour"`
+  Snow1hour    float64 `json:"snow_1hour"`
+  Snow6hour    float64 `json:"snow_6hour"`
+  Snow24hour   float64 `json:"snow_24hour"`
+  SnowMtd      float64 `json:"snow_mtd"`
+  SnowSeason   float64 `json:"snow_season"`
+  SnowYtd      float64 `json:"snow_ytd"`
+  Snow3day     float64 `json:"snow_3day"`
+  Snow7day     float64 `json:"snow_7day"`
+  Precip1hour  float64 `json:"precip_1hour"`
+  Precip6hour  float64 `json:"precip_6hour"`
   Precip24hour float64 `json:"precip_24hour"`
-  PrecipMtd float64 `json:"precip_mtd"`
-  PrecipYtd float64 `json:"precip_ytd"`
-  Precip3day float64 `json:"precip_3day"`
-  Precip7day float64 `json:"precip_7day"`
+  PrecipMtd    float64 `json:"precip_mtd"`
+  PrecipYtd    float64 `json:"precip_ytd"`
+  Precip3day   float64 `json:"precip_3day"`
+  Precip7day   float64 `json:"precip_7day"`
   // assuming *string, was always null
   ObsQualifier100char *string `json:"obs_qualifier_100char"`
   // assuming *string, was always null
@@ -327,7 +327,7 @@ type Observation struct {
   Dow string `json:"dow"`
   // "D" for day, "N" for night
   DayInd string `json:"day_ind"`
-  
+
   // Wind direction in degrees: 211
   Wdir int `json:"wdir"`
   // Wind direction as a string: SSW
@@ -357,7 +357,7 @@ type Observation struct {
   UvWarning int `json:"uv_warning"`
   // ex: "Very High"
   UvDesc string `json:"uv_desc"`
-  
+
   // ex: "wx1600"
   Wxman string `json:"wxman"`
   // assuming *string
@@ -366,7 +366,7 @@ type Observation struct {
   ObsQualifierSeverity *string `json:"obs_qualifier_severity"`
   // ex: "OT73:OX2600"
   VocalKey string `json:"vocal_key"`
-  
+
   // ex: 47
   IconCode int `json:"icon_code"`
   // ex: 3809
@@ -383,7 +383,7 @@ type Observation struct {
 }
 
 type CurrentResponse struct {
-  Metadata Metadata `json:"metadata"`
+  Metadata    Metadata    `json:"metadata"`
   Observation Observation `json:"observation"`
 }
 

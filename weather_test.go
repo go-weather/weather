@@ -1,14 +1,14 @@
 package weather
 
 import (
-  "testing"
   "github.com/stretchr/testify/assert"
+  "testing"
 )
 
-const(
-api_key = "6532d6454b8aa370768e63d6ba5a832e"
-test_lat = 40.754864
-test_lng = -74.007156
+const (
+  api_key  = "6532d6454b8aa370768e63d6ba5a832e"
+  test_lat = 40.754864
+  test_lng = -74.007156
 )
 
 func TestCurrentImperial(t *testing.T) {

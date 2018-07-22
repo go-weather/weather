@@ -1,0 +1,28 @@
+{
+  "metadata": {
+    "language": "en-US",
+    "transaction_id": "1532212454337:-56034070",
+    "version": "1",
+    "latitude": 40.75,
+    "longitude": -74,
+    "units": "e",
+    "expire_time_gmt": 1532213015,
+    "status_code": 200
+  },
+  "forecast": {
+    "class": "fod_short_range_wwir",
+    "expire_time_gmt": 1532213015,
+    "fcst_valid": 1532214000,
+    "fcst_valid_local": "2018-07-21T19:00:00-0400",
+    "overall_type": 1,
+    "phrase": "Expect occasional rain to continue for the next several hours.",
+    "terse_phrase": "Rain will continue.",
+    "phrase_template": "Expect occasional rain to continue for the next several hours.",
+    "terse_phrase_template": "Rain will continue.",
+    "precip_day": null,
+    "precip_time_24hr": null,
+    "precip_time_12hr": null,
+    "precip_time_iso": null,
+    "time_zone_abbrv": "EDT"
+  }
+}

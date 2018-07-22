@@ -103,11 +103,11 @@ type ForecastResponseDaypart struct {
   WindPhrase string `json:"wind_phrase"`
 
   // ex: "Sct T-Storms"
-  Phrase12Char string `json:"phrase_12char"`
+  Phrase12char string `json:"phrase_12char"`
   // ex: "Sct Thunderstorms"
-  Phrase22Char string `json:"phrase_22char"`
+  Phrase22char string `json:"phrase_22char"`
   // ex: "Scattered Thunderstorms"
-  Phrase32Char string `json:"phrase_32char"`
+  Phrase32char string `json:"phrase_32char"`
   // ex: "Scattered"
   SubphrasePt1 string `json:"subphrase_pt1"`
   // ex: "T-Storms"
@@ -347,11 +347,11 @@ type Observation struct {
   Clds string `json:"clds"`
 
   // ex: "Sct T-Storms"
-  Phrase12Char string `json:"phrase_12char"`
+  Phrase12char string `json:"phrase_12char"`
   // ex: "Sct Thunderstorms"
-  Phrase22Char string `json:"phrase_22char"`
+  Phrase22char string `json:"phrase_22char"`
   // ex: "Scattered Thunderstorms"
-  Phrase32Char string `json:"phrase_32char"`
+  Phrase32char string `json:"phrase_32char"`
 
   UvIndex   int `json:"uv_index"`
   UvWarning int `json:"uv_warning"`

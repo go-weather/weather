@@ -15,7 +15,7 @@ import (
 // there is data for night but not day part
 // of the day on which the forecast is retrieved.
 
-type ForecastResponseMetadata struct {
+type Metadata struct {
   // ex: "en-US"
   Language string `json:"language"`
   // ex: "1532212454337:-56034070"
@@ -154,10 +154,10 @@ type ForecastResponseDaypart struct {
   // ex: "D16:DA07:X3700380043:S380043:TL72:W08R04:P9041"
   VocalKey string `json:"vocal_key"`
 
-  // ex: 3809
-  IconExtd int `json:"icon_extd"`
   // ex: 47
   IconCode int `json:"icon_code"`
+  // ex: 3809
+  IconExtd int `json:"icon_extd"`
 }
 
 type ForecastResponseForecast struct {
@@ -226,7 +226,7 @@ type ForecastResponseForecast struct {
 }
 
 type Forecast10Response struct {
-  Metadata  ForecastResponseMetadata   `json:"metadata"`
+  Metadata  Metadata   `json:"metadata"`
   Forecasts []ForecastResponseForecast `json:"forecasts"`
 }
 
@@ -267,8 +267,125 @@ type WwirResponseForecast struct {
 }
 
 type WwirResponse struct {
-  Metadata ForecastResponseMetadata `json:"metadata"`
+  Metadata Metadata `json:"metadata"`
   Forecast []WwirResponseForecast   `json:"forecast"`
+}
+
+type UnitObservation struct {
+  Temp int `json:"temp"`
+  FeelsLike int `json:"feels_like"`
+  Wspd int `json:"wspd"`
+  // Was always null, assuming *string
+  Gust *string `json:"gust"`
+  // Visibility?
+  Vis int `json:"vis"`
+  // Mean sea level pressure?
+  Mslp float64 `json:"mslp"`
+  Altimeter float64 `json:"altimeter"`
+  Ceiling int `json:"ceiling"`
+  Dewpt int `json:"dewpt"`
+  Rh int `json:"rh"`
+  Wc int `json:"wc"`
+  Hi int `json:"hi"`
+  TempChange24hour int `json:"temp_change_24hour"`
+  TempMax24hour int `json:"temp_max_24hour"`
+  TempMin24hour int `json:"temp_min_24hour"`
+  Pchange float64 `json:"pchange"`
+  // These could be ints but more likely are all floats
+  Snow1hour float64 `json:"snow_1hour"`
+  Snow6hour float64 `json:"snow_6hour"`
+  Snow24hour float64 `json:"snow_24hour"`
+  SnowMtd float64 `json:"snow_mtd"`
+  SnowSeason float64 `json:"snow_season"`
+  SnowYtd float64 `json:"snow_ytd"`
+  Snow3day float64 `json:"snow_3day"`
+  Snow7day float64 `json:"snow_7day"`
+  Precip1hour float64 `json:"precip_1hour"`
+  Precip6hour float64 `json:"precip_6hour"`
+  Precip24hour float64 `json:"precip_24hour"`
+  PrecipMtd float64 `json:"precip_mtd"`
+  PrecipYtd float64 `json:"precip_ytd"`
+  Precip3day float64 `json:"precip_3day"`
+  Precip7day float64 `json:"precip_7day"`
+  // assuming *string, was always null
+  ObsQualifier100char *string `json:"obs_qualifier_100char"`
+  // assuming *string, was always null
+  ObsQualifier50char *string `json:"obs_qualifier_50char"`
+  // assuming *string, was always null
+  ObsQualifier32char *string `json:"obs_qualifier_32char"`
+}
+
+type Observation struct {
+  // "observation"
+  Class string `json:"class"`
+  // UTC timestamp: 1531769805
+  ExpireTimeGmt int64 `json:"expire_time_gmt"`
+  // UTC timestamp: 1531911600
+  ObsTime int64 `json:"obs_time"`
+  // ISO8601 local time: "2018-07-18T07:00:00-0400"
+  ObsTimeLocal string `json:"obs_time_local"`
+  // Day of week, e.g. "Monday", "Tuesday"
+  Dow string `json:"dow"`
+  // "D" for day, "N" for night
+  DayInd string `json:"day_ind"`
+  
+  // Wind direction in degrees: 211
+  Wdir int `json:"wdir"`
+  // Wind direction as a string: SSW
+  WdirCardinal string `json:"wdir_cardinal"`
+  // ISO8601 local time: "2018-07-17T05:22:44-0400"
+  Sunrise string `json:"sunrise"`
+  // ISO8601 local time: "2018-07-17T20:17:41-0400"
+  Sunset string `json:"sunset"`
+  // Pressure tendency, ex: 2
+  PtendCode int `json:"ptend_code"`
+  // ex: "Falling"
+  PtendDesc string `json:"ptend_desc"`
+  // ex: "Cloudy"
+  SkyCover string `json:"sky_cover"`
+  // ex: "BKN"
+  // Note this appears to be different from Clds in a forecast
+  Clds string `json:"clds"`
+
+  // ex: "Sct T-Storms"
+  Phrase12Char string `json:"phrase_12char"`
+  // ex: "Sct Thunderstorms"
+  Phrase22Char string `json:"phrase_22char"`
+  // ex: "Scattered Thunderstorms"
+  Phrase32Char string `json:"phrase_32char"`
+
+  UvIndex   int `json:"uv_index"`
+  UvWarning int `json:"uv_warning"`
+  // ex: "Very High"
+  UvDesc string `json:"uv_desc"`
+  
+  // ex: "wx1600"
+  Wxman string `json:"wxman"`
+  // assuming *string
+  ObsQualifierCode *string `json:"obs_qualifier_code"`
+  // assuming *string
+  ObsQualifierSeverity *string `json:"obs_qualifier_severity"`
+  // ex: "OT73:OX2600"
+  VocalKey string `json:"vocal_key"`
+  
+  // ex: 47
+  IconCode int `json:"icon_code"`
+  // ex: 3809
+  IconExtd int `json:"icon_extd"`
+
+  // units=e|a
+  Imperial *UnitObservation `json:"imperial"`
+  // units=m|a
+  Metric *UnitObservation `json:"metric"`
+  // units=s|a
+  MetricSi *UnitObservation `json:"metric_si"`
+  // units=h|a
+  UkHybrid *UnitObservation `json:"uk_hybrid"`
+}
+
+type CurrentResponse struct {
+  Metadata Metadata `json:"metadata"`
+  Observation Observation `json:"observation"`
 }
 
 type Client struct {
@@ -315,6 +432,15 @@ func (c *Client) doGetForecast10(url string) (*Forecast10Response, error) {
   return &payload, nil
 }
 
+func (c *Client) doGetCurrent(url string) (*CurrentResponse, error) {
+  var payload CurrentResponse
+  err := c.make_api_request(url, &payload)
+  if err != nil {
+    return nil, err
+  }
+  return &payload, nil
+}
+
 func (c *Client) doGetWwir(url string) (*WwirResponse, error) {
   var payload WwirResponse
   err := c.make_api_request(url, &payload)
@@ -327,6 +453,11 @@ func (c *Client) doGetWwir(url string) (*WwirResponse, error) {
 func (c *Client) GetForecast10ByLocation(lat float64, lng float64, units string) (*Forecast10Response, error) {
   url := c.make_api_url(lat, lng, "forecast/daily/10day", units)
   return c.doGetForecast10(url)
+}
+
+func (c *Client) GetCurrentByLocation(lat float64, lng float64, units string) (*CurrentResponse, error) {
+  url := c.make_api_url(lat, lng, "observations/current", units)
+  return c.doGetCurrent(url)
 }
 
 func (c *Client) GetWwirByLocation(lat float64, lng float64, units string) (*Forecast10Response, error) {

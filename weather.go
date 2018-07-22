@@ -268,21 +268,20 @@ type WwirResponseForecast struct {
 
 type WwirResponse struct {
   Metadata Metadata `json:"metadata"`
-  Forecast []WwirResponseForecast   `json:"forecast"`
+  Forecast WwirResponseForecast   `json:"forecast"`
 }
 
 type UnitObservation struct {
   Temp int `json:"temp"`
   FeelsLike int `json:"feels_like"`
   Wspd int `json:"wspd"`
-  // Was always null, assuming *string
-  Gust *string `json:"gust"`
+  Gust *int `json:"gust"`
   // Visibility?
-  Vis int `json:"vis"`
+  Vis float64 `json:"vis"`
   // Mean sea level pressure?
   Mslp float64 `json:"mslp"`
   Altimeter float64 `json:"altimeter"`
-  Ceiling int `json:"ceiling"`
+  Ceiling float64 `json:"ceiling"`
   Dewpt int `json:"dewpt"`
   Rh int `json:"rh"`
   Wc int `json:"wc"`
@@ -393,12 +392,11 @@ type Client struct {
   http_client http.Client
 }
 
-func NewClient(api_key string) (*Client, error) {
-  client := Client{
+func NewClient(api_key string) Client {
+  return Client{
     api_key,
     http.Client{},
   }
-  return &client, nil
 }
 
 func (c *Client) make_api_request(url string, payload interface{}) error {
@@ -460,9 +458,9 @@ func (c *Client) GetCurrentByLocation(lat float64, lng float64, units string) (*
   return c.doGetCurrent(url)
 }
 
-func (c *Client) GetWwirByLocation(lat float64, lng float64, units string) (*Forecast10Response, error) {
+func (c *Client) GetWwirByLocation(lat float64, lng float64, units string) (*WwirResponse, error) {
   url := c.make_api_url(lat, lng, "forecast/wwir", units)
-  return c.doGetForecast10(url)
+  return c.doGetWwir(url)
 }
 
 func (c *Client) make_api_url(lat float64, lng float64, path_fragment string, units string) string {
@@ -470,7 +468,7 @@ func (c *Client) make_api_url(lat float64, lng float64, path_fragment string, un
     units = "e"
   }
   url := fmt.Sprintf("https://api.weather.com/v1/geocode/%f/%f/%s.json?apiKey=%s&units=%s",
-    url.PathEscape(format_float(lat)), url.PathEscape(format_float(lng)),
+    lat, lng,
     path_fragment,
     url.PathEscape(c.api_key), url.PathEscape(units))
   //log.Debug(url)

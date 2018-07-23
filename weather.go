@@ -404,12 +404,12 @@ func NewClient(api_key string) Client {
 func (c *Client) make_api_request(url string, payload interface{}) error {
   req, err := http.NewRequest("GET", url, nil)
   if err != nil {
-    return errors.New("Could not send request:" + err.Error())
+    return errors.New("Could not send request: " + err.Error())
   }
 
   res, err := c.http_client.Do(req)
   if err != nil {
-    return errors.New("Could not read response:" + err.Error())
+    return errors.New("Could not read response: " + err.Error())
   }
 
   defer res.Body.Close()
@@ -417,7 +417,7 @@ func (c *Client) make_api_request(url string, payload interface{}) error {
   dec := json.NewDecoder(res.Body)
   err = dec.Decode(payload)
   if err != nil {
-    return errors.New("Could not decode:" + err.Error())
+    return errors.New("Could not decode: " + err.Error())
   }
 
   return nil

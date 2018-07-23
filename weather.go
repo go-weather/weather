@@ -154,7 +154,8 @@ type DaypartForecast struct {
   // ex: "D16:DA07:X3700380043:S380043:TL72:W08R04:P9041"
   VocalKey string `json:"vocal_key"`
 
-  // ex: 47
+  // ex: 30
+  // Maps to https://icons.wxug.com/i/c/v4/30.svg
   IconCode int `json:"icon_code"`
   // ex: 3809
   IconExtd int `json:"icon_extd"`
@@ -367,7 +368,8 @@ type Observation struct {
   // ex: "OT73:OX2600"
   VocalKey string `json:"vocal_key"`
 
-  // ex: 47
+  // ex: 30
+  // Maps to https://icons.wxug.com/i/c/v4/30.svg
   IconCode int `json:"icon_code"`
   // ex: 3809
   IconExtd int `json:"icon_extd"`

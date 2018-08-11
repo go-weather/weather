@@ -6,6 +6,17 @@ weather implements a client for weather.com API
 at https://api.weather.com/v1/. Sometimes this API is called
 the "Weather Underground API".
 
+## Features
+
+The following API endpoints are supported:
+
+- Current conditions by coordinates
+- "Imminent" forecast ("Rain starting in 45 minutes")
+- 10 day forecast by coordinates
+
+To retrive weather for a location like a city, it must be geocoded first.
+I recommend the [geocoder](https://github.com/jasonwinn/geocoder) package.
+
 ## Requirements
 
 An API key is required to use this package.

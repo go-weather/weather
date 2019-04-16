@@ -231,6 +231,108 @@ type Forecast10Response struct {
   Forecasts []Forecast10 `json:"forecasts"`
 }
 
+type HourlyForecast struct {
+  // Type of forecast, "fod_short_range_hourly" or "fod_long_range_hourly"
+  // for this data depending on how far out the forecast is from the current time
+  Class string `json:"class"`
+  // UTC timestamp: 1531769805
+  ExpireTimeGmt int64 `json:"expire_time_gmt"`
+  // UTC timestamp for the beginning of the interval that this forecast is for,
+  // ex. 1531911600
+  FcstValid int64 `json:"fcst_valid"`
+  // ISO8601 local time for the beginning of the interval that this forecast is
+  // for, ex. "2018-07-18T07:00:00-0400"
+  FcstValidLocal string `json:"fcst_valid_local"`
+  
+  // Day of week, e.g. "Monday", "Tuesday"
+  Dow string `json:"dow"`
+  // "D" for day, "N" for night
+  DayInd string `json:"day_ind"`
+  
+  // Number of this forecast in the returned data, starting with 1.
+  Num int `json:"num"`
+  
+  // Temperature in requested units, e.g. 47
+  Temp int `json:"temp"`
+  // "Feels like" temperature in requested units, e.g. 40
+  FeelsLike int `json:"feels_like"`
+  // Dew point in requested units, e.g. 28
+  Dewpt int `json:"dewpt"`
+
+  // Cloud cover in percent? ex: 5, 74
+  Clds int `json:"clds"`
+
+  // Precipitation type: "rain"
+  PrecipType string `json:"precip_type"`
+  // Probability of precipitation, in pecent: 90
+  Pop int `json:"pop"`
+
+  // Wind speed: 12
+  // This should be within the wind speed range given by the narrative
+  Wspd int `json:"wspd"`
+  // Wind direction in degrees: 211
+  Wdir int `json:"wdir"`
+  // Wind direction as a string: SSW
+  WdirCardinal string `json:"wdir_cardinal"`
+  // Wind gust speed: 20, or null
+  Gust      *int `json:"gust"`
+  
+  // Visibility?
+  Vis float64 `json:"vis"`
+  // Mean sea level pressure?
+  Mslp             float64 `json:"mslp"`
+
+  UvIndexRaw float64 `json:"uv_index_raw"`
+  UvIndex   int `json:"uv_index"`
+  UvWarning int `json:"uv_warning"`
+  // ex: "Very High"
+  UvDesc string `json:"uv_desc"`
+
+  // ex: 5
+  GolfIndex *int `json:"golf_index"`
+  // ex: "Fair"
+  // "" when GolfIndex is null
+  GolfCategory string `json:"golf_category"`
+
+  // ex: "Sct T-Storms"
+  Phrase12char string `json:"phrase_12char"`
+  // ex: "Sct Thunderstorms"
+  Phrase22char string `json:"phrase_22char"`
+  // ex: "Scattered Thunderstorms"
+  Phrase32char string `json:"phrase_32char"`
+  // ex: "Scattered"
+  SubphrasePt1 string `json:"subphrase_pt1"`
+  // ex: "T-Storms"
+  SubphrasePt2 string `json:"subphrase_pt2"`
+  // Always "" in data I've seen
+  SubphrasePt3 string `json:"subphrase_pt3"`
+
+  Qpf float64 `json:"qpf"`
+  // may be int
+  SnowQpf    float64 `json:"snow_qpf"`
+  
+  // ex: "wx1600"
+  Wxman string `json:"wxman"`
+  // Same as Temp, apparently
+  Hi int `json:"hi"`
+  // Same as FeelsLike, apparently
+  Wc int `json:"wc"`
+  // ex: 76
+  Rh int `json:"rh"`
+  Severity int `json:"severity"`
+
+  // ex: 30
+  // Maps to https://icons.wxug.com/i/c/v4/30.svg
+  IconCode int `json:"icon_code"`
+  // ex: 3809
+  IconExtd int `json:"icon_extd"`
+}
+
+type HourlyForecastResponse struct {
+  Metadata  Metadata     `json:"metadata"`
+  Forecasts []HourlyForecast `json:"forecasts"`
+}
+
 type Wwir struct {
   // Type of forecast, "fod_short_range_wwir" for this data
   Class string `json:"class"`
@@ -432,6 +534,15 @@ func (c *Client) doGetForecast10(url string) (*Forecast10Response, error) {
   return &payload, nil
 }
 
+func (c *Client) doGetHourlyForecast(url string) (*HourlyForecastResponse, error) {
+  var payload HourlyForecastResponse
+  err := c.make_api_request(url, &payload)
+  if err != nil {
+    return nil, err
+  }
+  return &payload, nil
+}
+
 func (c *Client) doGetCurrent(url string) (*CurrentResponse, error) {
   var payload CurrentResponse
   err := c.make_api_request(url, &payload)
@@ -453,6 +564,11 @@ func (c *Client) doGetWwir(url string) (*WwirResponse, error) {
 func (c *Client) GetForecast10ByLocation(lat float64, lng float64, units string) (*Forecast10Response, error) {
   url := c.make_api_url(lat, lng, "forecast/daily/10day", units)
   return c.doGetForecast10(url)
+}
+
+func (c *Client) GetHourlyForecast240ByLocation(lat float64, lng float64, units string) (*HourlyForecastResponse, error) {
+  url := c.make_api_url(lat, lng, "forecast/hourly/240hour", units)
+  return c.doGetHourlyForecast(url)
 }
 
 func (c *Client) GetCurrentByLocation(lat float64, lng float64, units string) (*CurrentResponse, error) {

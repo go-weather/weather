@@ -561,6 +561,11 @@ func (c *Client) doGetWwir(url string) (*WwirResponse, error) {
   return &payload, nil
 }
 
+//func (c *Client) GetForecast5ByLocation(lat float64, lng float64, units string) (*Forecast5Response, error) {
+//  url := c.make_api_url(lat, lng, "forecast/daily/5day", units)
+//  return c.doGetForecast5(url)
+//}
+
 func (c *Client) GetForecast10ByLocation(lat float64, lng float64, units string) (*Forecast10Response, error) {
   url := c.make_api_url(lat, lng, "forecast/daily/10day", units)
   return c.doGetForecast10(url)

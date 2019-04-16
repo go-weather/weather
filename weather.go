@@ -243,15 +243,15 @@ type HourlyForecast struct {
   // ISO8601 local time for the beginning of the interval that this forecast is
   // for, ex. "2018-07-18T07:00:00-0400"
   FcstValidLocal string `json:"fcst_valid_local"`
-  
+
   // Day of week, e.g. "Monday", "Tuesday"
   Dow string `json:"dow"`
   // "D" for day, "N" for night
   DayInd string `json:"day_ind"`
-  
+
   // Number of this forecast in the returned data, starting with 1.
   Num int `json:"num"`
-  
+
   // Temperature in requested units, e.g. 47
   Temp int `json:"temp"`
   // "Feels like" temperature in requested units, e.g. 40
@@ -275,16 +275,16 @@ type HourlyForecast struct {
   // Wind direction as a string: SSW
   WdirCardinal string `json:"wdir_cardinal"`
   // Wind gust speed: 20, or null
-  Gust      *int `json:"gust"`
-  
+  Gust *int `json:"gust"`
+
   // Visibility?
   Vis float64 `json:"vis"`
   // Mean sea level pressure?
-  Mslp             float64 `json:"mslp"`
+  Mslp float64 `json:"mslp"`
 
   UvIndexRaw float64 `json:"uv_index_raw"`
-  UvIndex   int `json:"uv_index"`
-  UvWarning int `json:"uv_warning"`
+  UvIndex    int     `json:"uv_index"`
+  UvWarning  int     `json:"uv_warning"`
   // ex: "Very High"
   UvDesc string `json:"uv_desc"`
 
@@ -309,8 +309,8 @@ type HourlyForecast struct {
 
   Qpf float64 `json:"qpf"`
   // may be int
-  SnowQpf    float64 `json:"snow_qpf"`
-  
+  SnowQpf float64 `json:"snow_qpf"`
+
   // ex: "wx1600"
   Wxman string `json:"wxman"`
   // Same as Temp, apparently
@@ -318,7 +318,7 @@ type HourlyForecast struct {
   // Same as FeelsLike, apparently
   Wc int `json:"wc"`
   // ex: 76
-  Rh int `json:"rh"`
+  Rh       int `json:"rh"`
   Severity int `json:"severity"`
 
   // ex: 30
@@ -329,7 +329,7 @@ type HourlyForecast struct {
 }
 
 type HourlyForecastResponse struct {
-  Metadata  Metadata     `json:"metadata"`
+  Metadata  Metadata         `json:"metadata"`
   Forecasts []HourlyForecast `json:"forecasts"`
 }
 

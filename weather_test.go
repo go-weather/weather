@@ -62,3 +62,10 @@ func TestForecast10Imperial(t *testing.T) {
   assert.Nil(t, err)
   assert.Equal(t, "fod_long_range_daily", resp.Forecasts[0].Class)
 }
+
+func TestHourlyForecast240Imperial(t *testing.T) {
+  c := NewClient(api_key)
+  resp, err := c.GetHourlyForecast240ByLocation(test_lat, test_lng, "e")
+  assert.Nil(t, err)
+  assert.Equal(t, "fod_short_range_hourly", resp.Forecasts[0].Class)
+}
